@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JamaBuses - Buses a Escala</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Reset y estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4; /* Fondo intermedio */
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Navbar (no se modifica) */
+        .navbar {
+            background-color: #000;
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 50px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: transform 0.3s;
+            font-size: 1.1rem;
+        }
+
+        .nav-links a:hover {
+            transform: scale(1.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background-image: url('image/jamitainicio.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Overlay oscuro */
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+    font-size: 4.5rem;
+    margin-bottom: 1rem;
+    font-family: 'Lora', serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 2s ease-in-out;
+}
+
+.hero .slogan {
+    font-size: 1.8rem;
+    font-style: italic;
+    margin-bottom: 2rem;
+    animation: slideIn 1.5s ease-in-out;
+}
+
+.cta-button {
+    background-color: #007acc;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: #005f99;
+}
+
+        .hero p {
+            font-size: 1.5rem;
+        }
+
+        /* Secciones principales */
+        section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #2C3E50; /* Color profesional */
+            text-align: center;
+            font-family: 'Lora', serif;
+        }
+
+        section p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .precio-destacado {
+    background: linear-gradient(135deg, #ff9800, #e00000); /* Gradiente naranja-rojo */
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
+}
+
+.precio-destacado h3 {
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: bold; /* Texto en negrita */
+}
+/* Galería con Crossfade */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+}
+
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    font-size: 2rem;
+    padding: 10px 15px;
+    z-index: 10;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.carousel-nav:hover {
+    background-color: rgba(0,0,0,0.7);
+}
+
+.nav-left {
+    left: 10px;
+}
+
+.nav-right {
+    right: 10px;
+}
+
+.carousel {
+    display: flex;
+    gap: 1rem;
+    overflow: hidden;
+    scroll-behavior: smooth;
+    width: 100%;
+}
+
+.carousel-item {
+    flex: 0 0 calc(33.333% - 1rem);
+    height: 250px;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.carousel-item:hover img {
+    transform: scale(1.1);
+}
+
+/* Modal con efecto de sobrepuesto */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    overflow: auto;
+}
+
+.modal img {
+    max-width: 90%;
+    max-height: 90vh;
+    margin: auto;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Efecto de opacidad en el fondo cuando el modal está abierto */
+body.modal-open {
+    overflow: hidden;
+}
+
+body.modal-open .carousel {
+    filter: blur(5px); /* Desenfoque en la galería */
+    opacity: 0.5; /* Opacidad reducida */
+    transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            overflow: auto;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 90vh;
+            margin: auto;
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Footer */
+        footer {
+            background: #000;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 2rem;
+            transition: transform 0.3s;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.2);
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        .dato-curioso {
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dato-curioso h3 {
+    font-size: 1.5rem;
+    color: #e00000;
+    margin-bottom: 1rem;
+}
+
+.dato-curioso ul {
+    list-style-type: disc;
+    padding-left: 2rem;
+}
+
+.dato-curioso li {
+    margin-bottom: 0.5rem;
+}
+
+/* Estilos para móviles */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 3rem; /* Título más pequeño en móviles */
+    }
+
+    .hero .slogan {
+        font-size: 1.2rem; /* Slogan más pequeño */
+    }
+
+    .nav-links {
+        gap: 1rem; /* Menos espacio entre enlaces */
+    }
+
+    .nav-links a {
+        font-size: 0.9rem; /* Texto más pequeño */
+    }
+
+    section {
+        padding: 2rem 1rem; /* Menos padding en secciones */
+    }
+
+    .precio-destacado h3 {
+        font-size: 1.2rem; /* Texto más pequeño */
+    }
+
+    .carousel-item {
+        width: 200px; /* Imágenes más pequeñas */
+        height: 150px;
+    }
+
+    .carousel-item .overlay {
+        font-size: 0.9rem; /* Texto más pequeño */
+    }
+
+    .social-links a {
+        font-size: 1.5rem; /* Íconos más pequeños */
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="#inicio" class="logo">
+                <img src="image/jama.jpeg" alt="JamaBuses Logo">
+            </a>
+            <div class="nav-links">
+                <a href="#inicio">Inicio</a>
+                <a href="#historia">Historia</a>
+                <a href="#galeria">Galería</a>
+                <a href="#vision">Visión</a>
+                <a href="#innovacion">Innovación</a>
+                <a href="#footer">Contacto</a>
+            </div>
+        </div>
+    </nav>
+
+<!-- Sección Inicio -->
+<section id="inicio" class="hero">
+    <div class="hero-content">
+        <p class="slogan">Donde la pasión por los buses cobra vida</p>
+        <h1>JamaBuses</h1>
+       
+    </div>
+</section>
+
+    <section id="inicio-content">
+        <h2>Buses Personalizados de Alta Calidad</h2>
+        <div class="precio-destacado">
+            <h3>~Precio de bus personalizado: Q950.00~</h3>
+        </div>
+        <p>
+            En JamaBuses, nos enorgullece ofrecer la fabricación de buses personalizados, elaborados con dedicación artesanal y diseñados en colaboración directa con nuestros clientes. Especializados en escalas 1:32 y 1:24, cada una de nuestras creaciones es una obra maestra en miniatura.
+        </p>
+        <p>
+            Utilizamos una exclusiva combinación de cuatro tipos de plástico de alta calidad y resina premium, garantizando no solo una durabilidad excepcional sino también un nivel de detalle que satisface a los coleccionistas más exigentes. Cada unidad es única, reflejando la visión particular de cada cliente.
+        </p>
+        <p>
+            Con orgullo, hemos expandido nuestros horizontes más allá de Guatemala, realizando entregas exitosas en diversos países de América Latina, estableciéndonos como un referente en la fabricación de buses a escala en la región.
+        </p>
+    </section>
+
+    <!-- Sección Historia -->
+    <section id="historia">
+        <h2>Nuestra Historia</h2>
+        <div class="historia-content">
+            <p>
+                Todo comenzó cuando tenía 7 años, donde mi pasión por los autobuses se manifestaba a través de mis dibujos. En aquella época, los viajes en transporte urbano con mi madre hacia la casa de mi abuelita eran toda una aventura que despertaba mi imaginación.
+            </p>
+            <p>
+                Un día memorable, mi madre compró un cereal de hojuelas de maíz que traía una sorpresa especial: un autobús escolar para armar en la parte posterior de la caja. Con curiosidad y determinación, seguí las líneas punteadas, doblé y pegué cada pieza hasta dar vida a mi primer autobús de papel. Esta experiencia dejó una huella imborrable en mi memoria y sembró la semilla de lo que años después se convertiría en JamaBuses.
+            </p>
+            <p>
+                La pandemia de 2021 marcó un punto de inflexión. Decidí retomar aquella pasión infantil y me propuse fabricar una réplica del legendario bus Rosmo del año 88 en escala 1:64. Utilizando materiales proporcionados por mi hermano, creé mi primera pieza profesional. La respuesta en redes sociales fue abrumadora: 20 personas mostraron interés en adquirirla a través de Facebook Marketplace, culminando en mi primera venta oficial.
+            </p>
+            <p>
+                Desde entonces, cada bus que creamos lleva consigo esa misma pasión y dedicación que nació en aquel niño de 7 años, transformada ahora en maestría artesanal y precisión técnica.
+            </p>
+            <div class="dato-curioso">
+                <h3>¿Sabías qué?</h3>
+                <p>
+                    La palabra <strong>JAMA</strong> tiene un significado muy especial:
+                </p>
+                <ul>
+                    <li><strong>J</strong>: Jesús, su salvador, y José (su nombre).</li>
+                    <li><strong>A</strong>: Alejandra (su esposa).</li>
+                    <li><strong>M</strong>: Marroquín (en honor a su apellido).</li>
+                    <li><strong>A</strong>: Adriana (su hija).</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Visión -->
+<section id="vision">
+    <h2>Visión</h2>
+    <p>
+        En JamaBuses, aspiramos a ser reconocidos como líderes en la fabricación de buses a escala en América Latina, destacándonos por nuestra calidad, innovación y compromiso con nuestros clientes. Buscamos inspirar a las nuevas generaciones a través de nuestras creaciones, manteniendo viva la pasión por el transporte urbano.
+    </p>
+</section>
+
+<!-- Sección Innovación -->
+<section id="innovacion">
+    <h2>Innovación</h2>
+    <p>
+        En JamaBuses, combinamos técnicas artesanales con tecnología moderna para crear buses únicos y detallados. Utilizamos materiales de alta calidad y técnicas innovadoras para garantizar que cada pieza sea una obra maestra en miniatura. Nuestro enfoque en la personalización nos permite satisfacer los gustos más exigentes de nuestros clientes.
+    </p>
+</section>
+
+<section id="galeria" class="gallery">
+    <h2>Galería de Nuestros Trabajos</h2>
+    <div class="carousel-container">
+        <button class="carousel-nav nav-left">&lt;</button>
+        <div class="carousel">
+            <div class="carousel-item">
+                <img src="image/bus1.jpeg" alt="Bus a escala 1">
+                <div class="overlay">Ver Detalle</div>
+            </div>
+            <div class="carousel-item">
+                <img src="image/bus2.jpeg" alt="Bus a escala 2">
+                <div class="overlay">Ver Detalle</div>
+            </div>
+            <div class="carousel-item">
+                <img src="image/bus3.jpeg" alt="Bus a escala 2">
+                <div class="overlay">Ver Detalle</div>
+            </div>
+            <div class="carousel-item">
+                <img src="image/bus4.jpeg" alt="Bus a escala 2">
+                <div class="overlay">Ver Detalle</div>
+            </div>
+            <div class="carousel-item">
+                <img src="image/bus5.jpeg" alt="Bus a escala 2">
+                <div class="overlay">Ver Detalle</div>
+            </div>
+            <div class="carousel-item">
+                <img src="image/bus6.jpeg" alt="Bus a escala 2">
+                <div class="overlay">Ver Detalle</div>
+            </div>
+            <div class="carousel-item">
+                <img src="image/bus7.jpeg" alt="Bus a escala 2">
+                <div class="overlay">Ver Detalle</div>
+            </div>
+            <div class="carousel-item">
+                <img src="image/bus8.jpeg" alt="Bus a escala 2">
+                <div class="overlay">Ver Detalle</div>
+            </div>
+            <div class="carousel-item">
+                <img src="image/bus9.jpeg" alt="Bus a escala 2">
+                <div class="overlay">Ver Detalle</div>
+            </div>
+            <div class="carousel-item">
+                <img src="image/bus10.jpeg" alt="Bus a escala 2">
+                <div class="overlay">Ver Detalle</div>
+            </div>
+            <div class="carousel-item">
+                <img src="image/bus11.jpeg" alt="Bus a escala 2">
+                <div class="overlay">Ver Detalle</div>
+            </div>
+            <div class="carousel-item">
+                <img src="image/bus12.jpeg" alt="Bus a escala 2">
+                <div class="overlay">Ver Detalle</div>
+                <div class="carousel-item">
+                    <img src="image/buS13.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus14.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus15.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus16.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus17.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus19.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus20.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus21.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus22.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus23.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus24.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus25.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus26.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus26.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus27.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus28.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus29.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus30.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus31.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus32.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus33.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus34.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus35.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus36.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus37.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus38.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus39.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus40.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus41.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus42.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus43.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus44.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus45.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus46.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus47.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus48.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus49.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus50.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus51.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus52.jpeg" alt="Bus a escala 2">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-nav nav-right">&gt;</button>
+    </div>
+</section>
+
+    <!-- Modal para imágenes -->
+    <div class="modal" id="imageModal">
+        <img src="" alt="Bus a escala" id="modalImage">
+    </div>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <h3>Síguenos en nuestras redes sociales</h3>
+        <div class="social-links">
+            <a href="https://www.tiktok.com/@busesjama?is_from_webapp=1&sender_device=pc" target="_blank">
+                <i class="fab fa-tiktok"></i>
+            </a>
+
+            <a href="https://www.facebook.com/profile.php?id=100076674911710" target="_blank">
+                <i class="fab fa-facebook"></i>
+            </a>
+        </div>
+        <p>&copy; 2025 JamaBuses - Todos los derechos reservados</p>
+    </footer>
+
+    <!-- JavaScript para la galería -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const carousel = document.querySelector('.carousel');
+            const navLeft = document.querySelector('.nav-left');
+            const navRight = document.querySelector('.nav-right');
+            const images = carousel.querySelectorAll('.carousel-item');
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const body = document.body;
+        
+            // Carousel Navigation with Looping
+            navLeft.addEventListener('click', () => {
+                const scrollAmount = carousel.offsetWidth;
+                const maxScroll = carousel.scrollWidth - carousel.offsetWidth;
+                
+                if (carousel.scrollLeft === 0) {
+                    // If at the start, jump to the end
+                    carousel.scrollTo({ left: maxScroll, behavior: 'smooth' });
+                } else {
+                    carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                }
+            });
+        
+            navRight.addEventListener('click', () => {
+                const scrollAmount = carousel.offsetWidth;
+                const maxScroll = carousel.scrollWidth - carousel.offsetWidth;
+                
+                if (carousel.scrollLeft >= maxScroll - 1) {
+                    // If at the end, jump back to the start
+                    carousel.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                }
+            });
+        
+            // Modal Functionality with Escape Key and Click Outside
+            images.forEach(item => {
+                item.addEventListener('click', () => {
+                    const img = item.querySelector('img');
+                    modal.style.display = "block";
+                    modalImg.src = img.src;
+                    body.classList.add('modal-open');
+                });
+            });
+        
+            // Close modal when clicking outside or pressing Escape
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal || e.target === modalImg) {
+                    modal.style.display = "none";
+                    body.classList.remove('modal-open');
+                }
+            });
+        
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === "Escape" && modal.style.display === "block") {
+                    modal.style.display = "none";
+                    body.classList.remove('modal-open');
+                }
+            });
+        });
+        </script>
+</body>
+</html>
