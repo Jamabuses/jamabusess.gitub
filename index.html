@@ -5,22 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JamaBuses - Buses a Escala</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         /* Reset y estilos generales */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
         }
 
         body {
-            background-color: #f4f4f4; /* Fondo intermedio */
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: #333;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* Navbar (no se modifica) */
+        /* Particles background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Navbar (sin modificar) */
         .navbar {
             background-color: #000;
             padding: 1rem;
@@ -28,6 +58,8 @@
             width: 100%;
             top: 0;
             z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
         }
 
         .nav-content {
@@ -58,19 +90,21 @@
             transform: scale(1.1);
         }
 
-        /* Hero Section */
+        /* Hero Section con animaciones mejoradas */
         .hero {
             height: 100vh;
             background-image: url('image/jamitainicio.jpeg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            background-attachment: fixed;
             position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
             text-align: center;
             color: white;
+            overflow: hidden;
         }
 
         .hero::before {
@@ -80,188 +114,309 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Overlay oscuro */
+            background: linear-gradient(45deg, rgba(0, 0, 0, 0.7), rgba(255, 152, 0, 0.3), rgba(224, 0, 0, 0.3));
+            animation: gradientShift 8s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background: linear-gradient(45deg, rgba(0, 0, 0, 0.7), rgba(255, 152, 0, 0.3), rgba(224, 0, 0, 0.3)); }
+            50% { background: linear-gradient(45deg, rgba(224, 0, 0, 0.3), rgba(0, 0, 0, 0.7), rgba(255, 152, 0, 0.3)); }
         }
 
         .hero-content {
             position: relative;
             z-index: 1;
+            max-width: 800px;
+            padding: 2rem;
         }
 
         .hero h1 {
-    font-size: 4.5rem;
-    margin-bottom: 1rem;
-    font-family: 'Lora', serif;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    animation: fadeIn 2s ease-in-out;
-}
-
-.hero .slogan {
-    font-size: 1.8rem;
-    font-style: italic;
-    margin-bottom: 2rem;
-    animation: slideIn 1.5s ease-in-out;
-}
-
-.cta-button {
-    background-color: #007acc;
-    color: white;
-    padding: 1rem 2rem;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 1.2rem;
-    transition: background-color 0.3s ease;
-}
-
-.cta-button:hover {
-    background-color: #005f99;
-}
-
-        .hero p {
-            font-size: 1.5rem;
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            font-family: 'Lora', serif;
+            font-weight: 700;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+            animation: titleGlow 3s ease-in-out infinite alternate;
+            background: linear-gradient(45deg, #ff9800, #e00000, #ff9800);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        /* Secciones principales */
+        @keyframes titleGlow {
+            0% { 
+                background-position: 0% 50%;
+                filter: drop-shadow(0 0 10px rgba(255, 152, 0, 0.8));
+            }
+            100% { 
+                background-position: 100% 50%;
+                filter: drop-shadow(0 0 20px rgba(224, 0, 0, 0.8));
+            }
+        }
+
+        .hero .slogan {
+            font-size: 1.8rem;
+            font-style: italic;
+            margin-bottom: 2rem;
+            animation: slideInFromLeft 2s ease-out;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes slideInFromLeft {
+            0% { transform: translateX(-100px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #ff9800, #e00000);
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 152, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 152, 0, 0.6);
+        }
+
+        /* Secciones principales con efectos mejorados */
         section {
             padding: 4rem 2rem;
             max-width: 1200px;
-            margin: 0 auto;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
+            margin: 2rem auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #ff9800, #e00000, #ff9800);
+            background-size: 200% 100%;
+            animation: gradientMove 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            color: #2C3E50; /* Color profesional */
+            font-size: 2.8rem;
+            margin-bottom: 2rem;
+            color: #2C3E50;
             text-align: center;
             font-family: 'Lora', serif;
+            font-weight: 700;
+            position: relative;
+            animation: slideInFromTop 1s ease-out;
+        }
+
+        @keyframes slideInFromTop {
+            0% { transform: translateY(-30px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #ff9800, #e00000);
+            border-radius: 2px;
         }
 
         section p {
             font-size: 1.1rem;
             margin-bottom: 1.5rem;
             text-align: justify;
+            line-height: 1.8;
+            animation: fadeIn 1.5s ease-out;
         }
 
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Precio destacado mejorado */
         .precio-destacado {
-    background: linear-gradient(135deg, #ff9800, #e00000); /* Gradiente naranja-rojo */
-    color: white;
-    padding: 1rem;
-    border-radius: 8px;
-    text-align: center;
-    margin-bottom: 2rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
-}
+            background: linear-gradient(135deg, #ff9800, #e00000);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(255, 152, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s ease-in-out infinite;
+        }
 
-.precio-destacado h3 {
-    font-size: 1.5rem;
-    margin: 0;
-    font-weight: bold; /* Texto en negrita */
-}
-/* Galería con Crossfade */
-.carousel-container {
-    position: relative;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-}
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
 
-.carousel-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0,0,0,0.5);
-    color: white;
-    border: none;
-    font-size: 2rem;
-    padding: 10px 15px;
-    z-index: 10;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
+        .precio-destacado::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s ease-in-out infinite;
+        }
 
-.carousel-nav:hover {
-    background-color: rgba(0,0,0,0.7);
-}
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-.nav-left {
-    left: 10px;
-}
+        .precio-destacado h3 {
+            font-size: 1.8rem;
+            margin: 0;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
 
-.nav-right {
-    right: 10px;
-}
+        /* Galería mejorada */
+        .gallery {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.95));
+        }
 
-.carousel {
-    display: flex;
-    gap: 1rem;
-    overflow: hidden;
-    scroll-behavior: smooth;
-    width: 100%;
-}
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
 
-.carousel-item {
-    flex: 0 0 calc(33.333% - 1rem);
-    height: 250px;
-    position: relative;
-    border-radius: 8px;
-    overflow: hidden;
-}
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(45deg, #ff9800, #e00000);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            padding: 15px 20px;
+            border-radius: 50%;
+            z-index: 10;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
 
-.carousel-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
+        .carousel-nav:hover {
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 152, 0, 0.5);
+        }
 
-.carousel-item:hover img {
-    transform: scale(1.1);
-}
+        .nav-left { left: -25px; }
+        .nav-right { right: -25px; }
 
-/* Modal con efecto de sobrepuesto */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    z-index: 1000;
-    overflow: auto;
-}
+        .carousel {
+            display: flex;
+            gap: 1.5rem;
+            overflow: hidden;
+            scroll-behavior: smooth;
+            width: 100%;
+            padding: 1rem 0;
+        }
 
-.modal img {
-    max-width: 90%;
-    max-height: 90vh;
-    margin: auto;
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-}
+        .carousel-item {
+            flex: 0 0 calc(33.333% - 1rem);
+            min-width: calc(33.333% - 1rem);
+            height: 280px;
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
 
-/* Efecto de opacidad en el fondo cuando el modal está abierto */
-body.modal-open {
-    overflow: hidden;
-}
+        .carousel-item:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
 
-body.modal-open .carousel {
-    filter: blur(5px); /* Desenfoque en la galería */
-    opacity: 0.5; /* Opacidad reducida */
-    transition: filter 0.3s ease, opacity 0.3s ease;
-}
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
 
-        /* Modal */
+        .carousel-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .carousel-item:hover .overlay {
+            transform: translateY(0);
+        }
+
+        /* Modal mejorado */
         .modal {
             display: none;
             position: fixed;
@@ -269,116 +424,288 @@ body.modal-open .carousel {
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
             overflow: auto;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+            margin: 5vh auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .modal img {
-            max-width: 90%;
+            max-width: 100%;
             max-height: 90vh;
-            margin: auto;
-            display: block;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            border-radius: 10px;
+            box-shadow: 0 0 50px rgba(255, 152, 0, 0.5);
+            animation: zoomIn 0.3s ease-out;
         }
 
-        /* Footer */
-        footer {
-            background: #000;
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 30px;
             color: white;
+            font-size: 3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .close-modal:hover {
+            color: #ff9800;
+            transform: rotate(90deg);
+        }
+
+        @keyframes zoomIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Dato curioso mejorado */
+        .dato-curioso {
+            background: linear-gradient(135deg, #f9f9f9, #ffffff);
             padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #e00000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dato-curioso::before {
+            content: '💡';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            opacity: 0.3;
+        }
+
+        .dato-curioso h3 {
+            font-size: 1.5rem;
+            color: #e00000;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .dato-curioso ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .dato-curioso li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .dato-curioso li::before {
+            content: '🚌';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* Footer mejorado */
+        footer {
+            background: linear-gradient(135deg, #000000, #333333);
+            color: white;
+            padding: 3rem 2rem;
             text-align: center;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.1;
+        }
+
+        footer h3 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
         }
 
         .social-links {
             display: flex;
             justify-content: center;
-            gap: 2rem;
-            margin: 1rem 0;
+            gap: 3rem;
+            margin: 2rem 0;
+            position: relative;
+            z-index: 1;
         }
 
         .social-links a {
             color: white;
-            font-size: 2rem;
-            transition: transform 0.3s;
+            font-size: 2.5rem;
+            transition: all 0.3s ease;
+            padding: 1rem;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff9800, #e00000);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
         .social-links a:hover {
-            transform: scale(1.2);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 25px rgba(255, 152, 0, 0.5);
         }
 
         footer p {
             margin: 0;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            position: relative;
+            z-index: 1;
         }
-        .dato-curioso {
-    background-color: #f9f9f9;
-    padding: 1.5rem;
-    border-radius: 8px;
-    margin-top: 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
-.dato-curioso h3 {
-    font-size: 1.5rem;
-    color: #e00000;
-    margin-bottom: 1rem;
-}
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .carousel-item {
+                flex: 0 0 calc(50% - 1rem);
+                min-width: calc(50% - 1rem);
+            }
+        }
 
-.dato-curioso ul {
-    list-style-type: disc;
-    padding-left: 2rem;
-}
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
 
-.dato-curioso li {
-    margin-bottom: 0.5rem;
-}
+            .hero .slogan {
+                font-size: 1.2rem;
+            }
 
-/* Estilos para móviles */
-@media (max-width: 768px) {
-    .hero h1 {
-        font-size: 3rem; /* Título más pequeño en móviles */
-    }
+            .nav-links {
+                gap: 1rem;
+            }
 
-    .hero .slogan {
-        font-size: 1.2rem; /* Slogan más pequeño */
-    }
+            .nav-links a {
+                font-size: 0.9rem;
+            }
 
-    .nav-links {
-        gap: 1rem; /* Menos espacio entre enlaces */
-    }
+            section {
+                padding: 2rem 1rem;
+                margin: 1rem;
+            }
 
-    .nav-links a {
-        font-size: 0.9rem; /* Texto más pequeño */
-    }
+            section h2 {
+                font-size: 2rem;
+            }
 
-    section {
-        padding: 2rem 1rem; /* Menos padding en secciones */
-    }
+            .precio-destacado h3 {
+                font-size: 1.4rem;
+            }
 
-    .precio-destacado h3 {
-        font-size: 1.2rem; /* Texto más pequeño */
-    }
+            .carousel-item {
+                flex: 0 0 calc(50% - 1rem);
+                min-width: calc(50% - 1rem);
+                height: 200px;
+            }
 
-    .carousel-item {
-        width: 200px; /* Imágenes más pequeñas */
-        height: 150px;
-    }
+            .social-links {
+                gap: 2rem;
+            }
 
-    .carousel-item .overlay {
-        font-size: 0.9rem; /* Texto más pequeño */
-    }
+            .social-links a {
+                font-size: 2rem;
+                padding: 0.8rem;
+            }
 
-    .social-links a {
-        font-size: 1.5rem; /* Íconos más pequeños */
-    }
-}
+            .carousel-nav {
+                font-size: 1.2rem;
+                padding: 10px 15px;
+            }
+
+            .nav-left { left: -15px; }
+            .nav-right { right: -15px; }
+        }
+
+        @media (max-width: 576px) {
+            .carousel-item {
+                flex: 0 0 calc(100% - 1rem);
+                min-width: calc(100% - 1rem);
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Animaciones de entrada */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .animate-on-scroll.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Loading animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #000000, #ff9800, #e00000);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeOut 1s ease-in-out 2s forwards;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; visibility: visible; }
+            100% { opacity: 0; visibility: hidden; }
+        }
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+
     <!-- Navbar -->
     <nav class="navbar">
         <div class="nav-content">
@@ -396,19 +723,19 @@ body.modal-open .carousel {
         </div>
     </nav>
 
-<!-- Sección Inicio -->
-<section id="inicio" class="hero">
-    <div class="hero-content">
-        <p class="slogan">Donde la pasión por los buses cobra vida</p>
-        <h1>JamaBuses</h1>
-       
-    </div>
-</section>
+    <!-- Sección Inicio -->
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <p class="slogan">Donde la pasión por los buses cobra vida</p>
+            <h1>JamaBuses</h1>
+            <a href="#galeria" class="cta-button">Ver Galería</a>
+        </div>
+    </section>
 
-    <section id="inicio-content">
+    <section id="inicio-content" class="animate-on-scroll">
         <h2>Buses Personalizados de Alta Calidad</h2>
         <div class="precio-destacado">
-            <h3>~Precio de bus personalizado: Q950.00~</h3>
+            <h3>✨ Precio de bus personalizado: Q950.00 ✨</h3>
         </div>
         <p>
             En JamaBuses, nos enorgullece ofrecer la fabricación de buses personalizados, elaborados con dedicación artesanal y diseñados en colaboración directa con nuestros clientes. Especializados en escalas 1:32 y 1:24, cada una de nuestras creaciones es una obra maestra en miniatura.
@@ -422,7 +749,7 @@ body.modal-open .carousel {
     </section>
 
     <!-- Sección Historia -->
-    <section id="historia">
+    <section id="historia" class="animate-on-scroll">
         <h2>Nuestra Historia</h2>
         <div class="historia-content">
             <p>
@@ -453,243 +780,236 @@ body.modal-open .carousel {
     </section>
 
     <!-- Sección Visión -->
-<section id="vision">
-    <h2>Visión</h2>
-    <p>
-        En JamaBuses, aspiramos a ser reconocidos como líderes en la fabricación de buses a escala en América Latina, destacándonos por nuestra calidad, innovación y compromiso con nuestros clientes. Buscamos inspirar a las nuevas generaciones a través de nuestras creaciones, manteniendo viva la pasión por el transporte urbano.
-    </p>
-</section>
+    <section id="vision" class="animate-on-scroll">
+        <h2>Visión</h2>
+        <p>
+            En JamaBuses, aspiramos a ser reconocidos como líderes en la fabricación de buses a escala en América Latina, destacándonos por nuestra calidad, innovación y compromiso con nuestros clientes. Buscamos inspirar a las nuevas generaciones a través de nuestras creaciones, manteniendo viva la pasión por el transporte urbano.
+        </p>
+    </section>
 
-<!-- Sección Innovación -->
-<section id="innovacion">
-    <h2>Innovación</h2>
-    <p>
-        En JamaBuses, combinamos técnicas artesanales con tecnología moderna para crear buses únicos y detallados. Utilizamos materiales de alta calidad y técnicas innovadoras para garantizar que cada pieza sea una obra maestra en miniatura. Nuestro enfoque en la personalización nos permite satisfacer los gustos más exigentes de nuestros clientes.
-    </p>
-</section>
+    <!-- Sección Innovación -->
+    <section id="innovacion" class="animate-on-scroll">
+        <h2>Innovación</h2>
+        <p>
+            En JamaBuses, combinamos técnicas artesanales con tecnología moderna para crear buses únicos y detallados. Utilizamos materiales de alta calidad y técnicas innovadoras para garantizar que cada pieza sea una obra maestra en miniatura. Nuestro enfoque en la personalización nos permite satisfacer los gustos más exigentes de nuestros clientes.
+        </p>
+    </section>
 
-<section id="galeria" class="gallery">
-    <h2>Galería de Nuestros Trabajos</h2>
-    <div class="carousel-container">
-        <button class="carousel-nav nav-left">&lt;</button>
-        <div class="carousel">
-            <div class="carousel-item">
-                <img src="image/bus1.jpeg" alt="Bus a escala 1">
-                <div class="overlay">Ver Detalle</div>
+    <!-- Galería con todas las imágenes -->
+    <section id="galeria" class="gallery animate-on-scroll">
+        <h2>Galería de Nuestros Trabajos</h2>
+        <div class="carousel-container">
+            <button class="carousel-nav nav-left">❮</button>
+            <div class="carousel">
+                <!-- Imágenes del 1 al 10 -->
+                <div class="carousel-item">
+                    <img src="image/bus1.jpeg" alt="Bus a escala 1" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus2.jpeg" alt="Bus a escala 2" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus3.jpeg" alt="Bus a escala 3" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus4.jpeg" alt="Bus a escala 4" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus5.jpeg" alt="Bus a escala 5" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus6.jpeg" alt="Bus a escala 6" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus7.jpeg" alt="Bus a escala 7" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus8.jpeg" alt="Bus a escala 8" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus9.jpeg" alt="Bus a escala 9" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus10.jpeg" alt="Bus a escala 10" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <!-- Imágenes del 11 al 20 -->
+                <div class="carousel-item">
+                    <img src="image/bus11.jpeg" alt="Bus a escala 11" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus12.jpeg" alt="Bus a escala 12" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus13.jpeg" alt="Bus a escala 13" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus14.jpeg" alt="Bus a escala 14" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus15.jpeg" alt="Bus a escala 15" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus16.jpeg" alt="Bus a escala 16" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus17.jpeg" alt="Bus a escala 17" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus19.jpeg" alt="Bus a escala 19" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus20.jpeg" alt="Bus a escala 20" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <!-- Imágenes del 21 al 30 -->
+                <div class="carousel-item">
+                    <img src="image/bus21.jpeg" alt="Bus a escala 21" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus22.jpeg" alt="Bus a escala 22" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus23.jpeg" alt="Bus a escala 23" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus24.jpeg" alt="Bus a escala 24" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus25.jpeg" alt="Bus a escala 25" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus26.jpeg" alt="Bus a escala 26" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus27.jpeg" alt="Bus a escala 27" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus28.jpeg" alt="Bus a escala 28" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus29.jpeg" alt="Bus a escala 29" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus30.jpeg" alt="Bus a escala 30" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <!-- Imágenes del 31 al 40 -->
+                <div class="carousel-item">
+                    <img src="image/bus31.jpeg" alt="Bus a escala 31" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus32.jpeg" alt="Bus a escala 32" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus34.jpeg" alt="Bus a escala 34" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus35.jpeg" alt="Bus a escala 35" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus36.jpeg" alt="Bus a escala 36" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus37.jpeg" alt="Bus a escala 37" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus38.jpeg" alt="Bus a escala 38" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus39.jpeg" alt="Bus a escala 39" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus40.jpeg" alt="Bus a escala 40" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <!-- Imágenes del 41 al 52 -->
+                <div class="carousel-item">
+                    <img src="image/bus41.jpeg" alt="Bus a escala 41" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus42.jpeg" alt="Bus a escala 42" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus43.jpeg" alt="Bus a escala 43" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus44.jpeg" alt="Bus a escala 44" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus45.jpeg" alt="Bus a escala 45" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus46.jpeg" alt="Bus a escala 46" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus47.jpeg" alt="Bus a escala 47" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus48.jpeg" alt="Bus a escala 48" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus49.jpeg" alt="Bus a escala 49" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus50.jpeg" alt="Bus a escala 50" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus51.jpeg" alt="Bus a escala 51" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image/bus52.jpeg" alt="Bus a escala 52" loading="lazy">
+                    <div class="overlay">Ver Detalle</div>
+                </div>
             </div>
-            <div class="carousel-item">
-                <img src="image/bus2.jpeg" alt="Bus a escala 2">
-                <div class="overlay">Ver Detalle</div>
-            </div>
-            <div class="carousel-item">
-                <img src="image/bus3.jpeg" alt="Bus a escala 2">
-                <div class="overlay">Ver Detalle</div>
-            </div>
-            <div class="carousel-item">
-                <img src="image/bus4.jpeg" alt="Bus a escala 2">
-                <div class="overlay">Ver Detalle</div>
-            </div>
-            <div class="carousel-item">
-                <img src="image/bus5.jpeg" alt="Bus a escala 2">
-                <div class="overlay">Ver Detalle</div>
-            </div>
-            <div class="carousel-item">
-                <img src="image/bus6.jpeg" alt="Bus a escala 2">
-                <div class="overlay">Ver Detalle</div>
-            </div>
-            <div class="carousel-item">
-                <img src="image/bus7.jpeg" alt="Bus a escala 2">
-                <div class="overlay">Ver Detalle</div>
-            </div>
-            <div class="carousel-item">
-                <img src="image/bus8.jpeg" alt="Bus a escala 2">
-                <div class="overlay">Ver Detalle</div>
-            </div>
-            <div class="carousel-item">
-                <img src="image/bus9.jpeg" alt="Bus a escala 2">
-                <div class="overlay">Ver Detalle</div>
-            </div>
-            <div class="carousel-item">
-                <img src="image/bus10.jpeg" alt="Bus a escala 2">
-                <div class="overlay">Ver Detalle</div>
-            </div>
-            <div class="carousel-item">
-                <img src="image/bus11.jpeg" alt="Bus a escala 2">
-                <div class="overlay">Ver Detalle</div>
-            </div>
-            <div class="carousel-item">
-                <img src="image/bus12.jpeg" alt="Bus a escala 2">
-                <div class="overlay">Ver Detalle</div>
-                <div class="carousel-item">
-                    <img src="image/buS13.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus14.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus15.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus16.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus17.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus19.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus20.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus21.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus22.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus23.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus24.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus25.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus26.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus26.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus27.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus28.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus29.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus30.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus31.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus32.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus33.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus34.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus35.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus36.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus37.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus38.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus39.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus40.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus41.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus42.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus43.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus44.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus45.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus46.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus47.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus48.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus49.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus50.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus51.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-                <div class="carousel-item">
-                    <img src="image/bus52.jpeg" alt="Bus a escala 2">
-                    <div class="overlay">Ver Detalle</div>
-                </div>
-            </div>
+            <button class="carousel-nav nav-right">❯</button>
         </div>
-        <button class="carousel-nav nav-right">&gt;</button>
-    </div>
-</section>
-
-    <!-- Modal para imágenes -->
-    <div class="modal" id="imageModal">
-        <img src="" alt="Bus a escala" id="modalImage">
-    </div>
+    </section>
 
     <!-- Footer -->
     <footer id="footer">
@@ -698,7 +1018,6 @@ body.modal-open .carousel {
             <a href="https://www.tiktok.com/@busesjama?is_from_webapp=1&sender_device=pc" target="_blank">
                 <i class="fab fa-tiktok"></i>
             </a>
-
             <a href="https://www.facebook.com/profile.php?id=100076674911710" target="_blank">
                 <i class="fab fa-facebook"></i>
             </a>
@@ -706,68 +1025,125 @@ body.modal-open .carousel {
         <p>&copy; 2025 JamaBuses - Todos los derechos reservados</p>
     </footer>
 
-    <!-- JavaScript para la galería -->
+    <!-- Modal para imágenes -->
+    <div class="modal" id="imageModal">
+        <span class="close-modal">&times;</span>
+        <div class="modal-content">
+            <img src="" alt="Bus a escala" id="modalImage">
+        </div>
+    </div>
+
+    <!-- JavaScript mejorado -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function() {
+            // Loading screen
+            setTimeout(function() {
+                document.querySelector('.loading').style.opacity = '0';
+                setTimeout(function() {
+                    document.querySelector('.loading').style.display = 'none';
+                }, 1000);
+            }, 2000);
+
+            // Create particles
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.width = `${Math.random() * 15 + 5}px`;
+                particle.style.height = particle.style.width;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.animationDuration = `${Math.random() * 10 + 5}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                particlesContainer.appendChild(particle);
+            }
+
+            // Scroll animations
+            const animateElements = document.querySelectorAll('.animate-on-scroll');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            animateElements.forEach(el => observer.observe(el));
+
+            // Carousel functionality
             const carousel = document.querySelector('.carousel');
             const navLeft = document.querySelector('.nav-left');
             const navRight = document.querySelector('.nav-right');
-            const images = carousel.querySelectorAll('.carousel-item');
+            const carouselItems = document.querySelectorAll('.carousel-item');
             const modal = document.getElementById('imageModal');
             const modalImg = document.getElementById('modalImage');
-            const body = document.body;
-        
-            // Carousel Navigation with Looping
+            const closeModal = document.querySelector('.close-modal');
+
+            // Calculate scroll amount based on item width
+            const scrollAmount = () => {
+                const itemWidth = carouselItems[0].offsetWidth + 
+                                 parseFloat(getComputedStyle(carousel).gap.replace('px', ''));
+                return itemWidth * 3; // Scroll 3 items at a time
+            };
+
             navLeft.addEventListener('click', () => {
-                const scrollAmount = carousel.offsetWidth;
-                const maxScroll = carousel.scrollWidth - carousel.offsetWidth;
-                
-                if (carousel.scrollLeft === 0) {
-                    // If at the start, jump to the end
-                    carousel.scrollTo({ left: maxScroll, behavior: 'smooth' });
-                } else {
-                    carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-                }
+                carousel.scrollBy({ left: -scrollAmount(), behavior: 'smooth' });
             });
-        
+
             navRight.addEventListener('click', () => {
-                const scrollAmount = carousel.offsetWidth;
-                const maxScroll = carousel.scrollWidth - carousel.offsetWidth;
-                
-                if (carousel.scrollLeft >= maxScroll - 1) {
-                    // If at the end, jump back to the start
-                    carousel.scrollTo({ left: 0, behavior: 'smooth' });
-                } else {
-                    carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-                }
+                carousel.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
             });
-        
-            // Modal Functionality with Escape Key and Click Outside
-            images.forEach(item => {
+
+            // Modal functionality
+            carouselItems.forEach(item => {
                 item.addEventListener('click', () => {
                     const img = item.querySelector('img');
-                    modal.style.display = "block";
+                    modal.style.display = 'block';
                     modalImg.src = img.src;
-                    body.classList.add('modal-open');
+                    document.body.style.overflow = 'hidden';
                 });
             });
-        
-            // Close modal when clicking outside or pressing Escape
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal || e.target === modalImg) {
-                    modal.style.display = "none";
-                    body.classList.remove('modal-open');
+
+            closeModal.addEventListener('click', () => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
                 }
             });
-        
-            // Close modal with Escape key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === "Escape" && modal.style.display === "block") {
-                    modal.style.display = "none";
-                    body.classList.remove('modal-open');
+
+            // Keyboard navigation for modal
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.style.display === 'block') {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
                 }
+            });
+
+            // Auto-hide navbar on scroll down
+            let lastScroll = 0;
+            const navbar = document.querySelector('.navbar');
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                if (currentScroll <= 0) {
+                    navbar.style.transform = 'translateY(0)';
+                    return;
+                }
+                
+                if (currentScroll > lastScroll && currentScroll > 100) {
+                    // Scroll down
+                    navbar.style.transform = 'translateY(-100%)';
+                } else {
+                    // Scroll up
+                    navbar.style.transform = 'translateY(0)';
+                }
+                lastScroll = currentScroll;
             });
         });
-        </script>
+    </script>
 </body>
 </html>
